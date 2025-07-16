@@ -2,7 +2,13 @@ import { MDXRemote } from 'next-mdx-remote/rsc';
 import BlogPost from '../../../components/BlogPost';
 import { getPostBySlug } from '../../../lib/posts';
 
-export default async function Page({ params }: { params: { slug: string } }) {
+type Props = {
+  params: {
+    slug: string;
+  };
+};
+
+export default async function Page({ params }: Props) {
   const post = await getPostBySlug(params.slug);
   if (!post) return <div>Post not found</div>;
   return (
