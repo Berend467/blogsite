@@ -2,8 +2,8 @@ import BlogList from "../components/BlogList";
 import { getAllPosts } from "../lib/posts";
 import { motion } from "framer-motion";
 
-export default function HomePage() {
-  const allPosts = getAllPosts()
+export default async function HomePage() {
+  const allPosts = (await getAllPosts())
     .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
     .slice(0, 3)
     .map(post => ({

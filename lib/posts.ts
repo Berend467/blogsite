@@ -1,21 +1,27 @@
-import fs from 'fs';
+import fs from 'fs/promises';
 import path from 'path';
 import matter from 'gray-matter';
 
-export function getPostBySlug(slug: string) {
+export async function getPostBySlug(slug: string) {
   const postPath = path.join(process.cwd(), 'content', 'posts', `${slug}.mdx`);
-  if (!fs.existsSync(postPath)) return null;
-  const source = fs.readFileSync(postPath, 'utf8');
-  const { content, data } = matter(source);
-  return { content, data };
+  try {
+    const source = await fs.readFile(postPath, 'utf8');
+    const { content, data } = matter(source);
+    return { content, data };
+  } catch {
+    return null;
+  }
 }
 
-export function getAllPosts() {
+export async function getAllPosts() {
   const postsDir = path.join(process.cwd(), 'content', 'posts');
-  const files = fs.readdirSync(postsDir);
-  return files.filter(f => f.endsWith('.mdx')).map(filename => {
-    const slug = filename.replace(/\.mdx$/, '');
-    const { content, data } = matter(fs.readFileSync(path.join(postsDir, filename), 'utf8'));
-    return { slug, content, data };
-  });
+  const files = await fs.readdir(postsDir);
+  return Promise.all(
+    files.filter(f => f.endsWith('.mdx')).map(async filename => {
+      const slug = filename.replace(/\.mdx$/, '');
+      const source = await fs.readFile(path.join(postsDir, filename), 'utf8');
+      const { content, data } = matter(source);
+      return { slug, content, data };
+    })
+  );
 } 

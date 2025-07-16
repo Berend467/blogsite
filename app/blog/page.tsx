@@ -1,8 +1,8 @@
 import BlogList from "../../components/BlogList";
 import { getAllPosts } from "../../lib/posts";
 
-export default function BlogArchivePage() {
-  const allPosts = getAllPosts().map(post => ({
+export default async function BlogArchivePage() {
+  const allPosts = (await getAllPosts()).map(post => ({
     slug: post.slug,
     title: post.data.title,
     excerpt: post.data.excerpt,
