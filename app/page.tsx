@@ -1,34 +1,19 @@
 import BlogList from "../components/BlogList";
+import { getAllPosts } from "../lib/posts";
 import { motion } from "framer-motion";
 
-const featuredPosts = [
-  {
-    slug: "welcome-to-the-minimal-blog",
-    title: "Welcome to the Minimal Blog",
-    excerpt: "A clean, modern blog template inspired by Curate Labs.",
-    image: "/images/featured1.jpg",
-    tags: ["design", "minimalism"],
-    category: "Inspiration",
-  },
-  {
-    slug: "minimalism-in-web-design",
-    title: "Minimalism in Web Design",
-    excerpt: "How whitespace and typography create focus and clarity.",
-    image: "/images/featured2.jpg",
-    tags: ["design", "web"],
-    category: "Design",
-  },
-  {
-    slug: "building-with-nextjs-tailwind",
-    title: "Building with Next.js & Tailwind",
-    excerpt: "A modern stack for fast, beautiful blogs.",
-    image: "/images/featured3.jpg",
-    tags: ["tech", "nextjs"],
-    category: "Development",
-  },
-];
-
 export default function HomePage() {
+  const allPosts = getAllPosts()
+    .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
+    .slice(0, 3)
+    .map(post => ({
+      slug: post.slug,
+      title: post.data.title,
+      excerpt: post.data.excerpt,
+      image: post.data.image,
+      tags: post.data.tags,
+      category: post.data.category,
+    }));
   return (
     <>
       <motion.section
@@ -40,7 +25,7 @@ export default function HomePage() {
         <h1 className="text-5xl font-bold mb-4">Curated Ideas, Minimal Design</h1>
         <p className="text-lg text-gray-500 mb-10">A modern blog for thoughtful stories and inspiration.</p>
       </motion.section>
-      <BlogList posts={featuredPosts} />
+      <BlogList posts={allPosts} />
     </>
   );
 }

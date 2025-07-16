@@ -1,20 +1,15 @@
-import fs from 'fs';
-import path from 'path';
-import { notFound } from 'next/navigation';
 import { MDXRemote } from 'next-mdx-remote/rsc';
-import matter from 'gray-matter';
 import BlogPost from '../../../components/BlogPost';
+import { getPostBySlug } from '../../../lib/posts';
 
 export default async function BlogPostPage({ params }: { params: { slug: string } }) {
-  const postPath = path.join(process.cwd(), 'content', 'posts', `${params.slug}.mdx`);
-  if (!fs.existsSync(postPath)) return notFound();
-  const source = fs.readFileSync(postPath, 'utf8');
-  const { content, data } = matter(source);
+  const post = getPostBySlug(params.slug);
+  if (!post) return <div>Post not found</div>;
   return (
     <BlogPost post={{
-      title: data.title,
-      image: data.image,
-      content: <MDXRemote source={content} />,
+      title: post.data.title,
+      image: post.data.image,
+      content: <MDXRemote source={post.content} />,
     }} />
   );
 } 
