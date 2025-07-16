@@ -1,7 +1,6 @@
-import BlogList from "../components/BlogList";
-import { motion } from "framer-motion";
+import BlogList from "../../components/BlogList";
 
-const featuredPosts = [
+const allPosts = [
   {
     slug: "welcome-to-the-minimal-blog",
     title: "Welcome to the Minimal Blog",
@@ -28,19 +27,12 @@ const featuredPosts = [
   },
 ];
 
-export default function HomePage() {
+export default function BlogArchivePage() {
+  // Filtering logic can be added here
   return (
-    <>
-      <motion.section
-        className="py-16 text-center"
-        initial={{ opacity: 0, y: 40 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-      >
-        <h1 className="text-5xl font-bold mb-4">Curated Ideas, Minimal Design</h1>
-        <p className="text-lg text-gray-500 mb-10">A modern blog for thoughtful stories and inspiration.</p>
-      </motion.section>
-      <BlogList posts={featuredPosts} />
-    </>
+    <section className="py-12">
+      <h1 className="text-4xl font-bold mb-8 text-center">All Posts</h1>
+      <BlogList posts={allPosts} />
+    </section>
   );
-}
+} 
